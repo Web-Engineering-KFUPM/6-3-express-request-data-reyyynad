@@ -104,54 +104,42 @@ LAB SETUP INSTRUCTIONS
  *
  */
 
+
+
 import express from "express";
 const app = express();
 
-
 // create server
 app.listen(3000, ()=> console.log("API running at http://localhost:3000"));
- 
-app.get("/echo", (req, res) => {
-   const { name, age } = req.query;
- 
-   if (!name || !age) {
-     return res.status(400).json({ ok: false, error: "name & age required" });
-   }
- 
-   res.json({ ok: true, name, age, msg: `Hello ${name}, you are ${age}` });
- });
- 
 
 // Query params: /echo?name=Ali&age=22
-app.get("/profile/:first/:last", (req, res) => {
-   const { first, last } = req.params;
-   res.json({ ok: true, fullName: `${first} ${last}` });
- });
- 
+app.get("/echo", (req, res) => {
+  const { name, age } = req.query;
 
+  if (!name || !age) {
+    return res.status(400).json({ ok: false, error: "name & age required" });
+  }
+
+  res.json({ ok: true, name, age, msg: `Hello ${name}, you are ${age}` });
+});
 
 // Route params: /profile/First/Last
-
+app.get("/profile/:first/:last", (req, res) => {
+  const { first, last } = req.params;
+  res.json({ ok: true, fullName: `${first} ${last}` });
+});
 
 // Route param middleware example: /users/42
-
 app.param("userId", (req, res, next, userId) => {
-   const num = Number(userId);
- 
-   if (isNaN(num) || num <= 0) {
-     return res.status(400).json({ ok: false, error: "userId must be positive number" });
-   }
- 
-   req.userIdNum = num;
-   next();
- });
+  const num = Number(userId);
+  if (isNaN(num) || num <= 0) {
+    return res.status(400).json({ ok: false, error: "userId must be positive number" });
+  }
+  req.userIdNum = num;
+  next();
+});
 
 // Route params: /users/:userId route
 app.get("/users/:userId", (req, res) => {
-   res.json({ ok: true, userId: req.userIdNum });
- });
- 
-
- 
-
-
+  res.json({ ok: true, userId: req.userIdNum });
+});
