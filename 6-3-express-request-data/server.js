@@ -21,7 +21,7 @@ LAB SETUP INSTRUCTIONS
 3. Start the back-end server from terminal, path: 6-3-express-request-data-Dromarjh-main\6-3-express-request-data:
    Run:
       node server.js
-
+ node server.js
   If your system blocks running npm commands (especially on Windows PowerShell),
    run this command first to allow script execution:
       Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
@@ -138,5 +138,16 @@ app.get("/profile/:first/:last", (req, res) => {
 
 // Route params: /users/:userId route
 
+app.param("userId", (req, res, next, userId) => {
+   const num = Number(userId);
+ 
+   if (isNaN(num) || num <= 0) {
+     return res.status(400).json({ ok: false, error: "userId must be positive number" });
+   }
+ 
+   req.userIdNum = num;
+   next();
+ });
+ 
 
 
